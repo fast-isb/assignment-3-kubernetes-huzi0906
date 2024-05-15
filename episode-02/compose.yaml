@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  frontend:
+    depends_on:
+      - backend
+    build: ./frontend
+    ports:
+      - 80:80
+
+  backend:
+    depends_on:
+      - db
+    build: ./backend
+    ports:
+      - 8000:8000
+    environment:
+      MONGO_DB_SECRET: mongodb://db/scd_assignment_03
+      NODE_ENV: production
+
+  db:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - scd_assignment_03:/data/db
+
+volumes:
+  scd_assignment_03:
