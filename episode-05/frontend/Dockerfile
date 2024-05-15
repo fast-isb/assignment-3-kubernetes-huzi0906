@@ -32,7 +32,7 @@ USER node
 COPY . .
 
 # Run the application.
-RUN npm build
+RUN npm run build
 
 # Now use nginx to serve the static files
 FROM nginx:alpine
