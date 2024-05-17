@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ep4db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ep4db
+  template:
+    metadata:
+      labels:
+        app: ep4db
+    spec:
+      containers:
+        - name: ep4db
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: ep4db-data
+              mountPath: /data/db
+      volumes:
+        - name: ep4db-data
+          persistentVolumeClaim:
+            claimName: ep4db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ep4db
+spec:
+  selector:
+    app: ep4db
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP

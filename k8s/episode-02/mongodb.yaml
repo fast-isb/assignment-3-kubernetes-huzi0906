@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ep2db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ep2db
+  template:
+    metadata:
+      labels:
+        app: ep2db
+    spec:
+      containers:
+        - name: ep2db
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: ep2db-data
+              mountPath: /data/db
+      volumes:
+        - name: ep2db-data
+          persistentVolumeClaim:
+            claimName: ep2db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ep2db
+spec:
+  selector:
+    app: ep2db
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP

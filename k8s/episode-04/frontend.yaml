@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ep4f
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ep4f
+  template:
+    metadata:
+      labels:
+        app: ep4f
+    spec:
+      containers:
+        - name: ep4f
+          image: huzi0906/ep4f
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: http://ep4b.production.svc.cluster.local:8000
+          ports:
+            - containerPort: 80
+              hostPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ep4f
+spec:
+  selector:
+    app: ep4f
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

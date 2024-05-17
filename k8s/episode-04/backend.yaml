@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ep4b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ep4b
+  template:
+    metadata:
+      labels:
+        app: ep4b
+    spec:
+      containers:
+        - name: ep4b
+          image: huzi0906/ep4b
+          ports:
+            - containerPort: 8000
+          env:
+            - name: MONGO_DB_URL
+              value: mongodb://ep4db.production.svc.cluster.local:27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ep4b
+spec:
+  selector:
+    app: ep4b
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP

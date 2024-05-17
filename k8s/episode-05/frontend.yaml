@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ep5f
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ep5f
+  template:
+    metadata:
+      labels:
+        app: ep5f
+    spec:
+      containers:
+        - name: ep5f
+          image: huzi0906/ep5f
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: http://ep5b.production.svc.cluster.local:8000
+          ports:
+            - containerPort: 80
+              hostPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ep5f
+spec:
+  selector:
+    app: ep5f
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

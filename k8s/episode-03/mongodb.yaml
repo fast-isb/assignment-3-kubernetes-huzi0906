@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ep3db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ep3db
+  template:
+    metadata:
+      labels:
+        app: ep3db
+    spec:
+      containers:
+        - name: ep3db
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: ep3db-data
+              mountPath: /data/db
+      volumes:
+        - name: ep3db-data
+          persistentVolumeClaim:
+            claimName: ep3db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ep3db
+spec:
+  selector:
+    app: ep3db
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
