@@ -18,20 +18,20 @@ spec:
           ports:
             - containerPort: 27017
           volumeMounts:
-            - name: mongodb-data
+            - name: ep1db-data
               mountPath: /data/db
       volumes:
-        - name: mongodb-data
+        - name: ep1db-data
           persistentVolumeClaim:
-            claimName: mongodb-pvc
+            claimName: ep1db-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb
+  name: ep1db
 spec:
   selector:
-    app: mongodb
+    app: ep1db
   ports:
     - protocol: TCP
       port: 27017
